@@ -3,12 +3,12 @@ from django.shortcuts import render
 
 from django.core.files.storage import FileSystemStorage
 
-from keras.models import load_model
-from keras.preprocessing import image
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing import image
 import tensorflow as tf
 import json
 
-from tensorflow import Graph, Session
+#from tensorflow import Graph, Session
 
 
 
@@ -22,9 +22,9 @@ labelInfo=json.loads(labelInfo)
 
 
 
-model_graph = Graph()
+model_graph = tf.Graph()
 with model_graph.as_default():
-    tf_session = Session()
+    tf_session = tf.compat.v1.Session()
     with tf_session.as_default():
         model=load_model('./models/modeloCNN.h5')
 
