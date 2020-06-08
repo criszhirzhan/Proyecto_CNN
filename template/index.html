@@ -2,26 +2,29 @@
 
 {% block content%}
 
-    <h2>Seleccione una imagen para clasificar</h2>
-
-    
+<h2>Seleccione una imagen para clasificar</h2>
+<br>
+<form class="c" method="post" enctype="multipart/form-data" action="predictImage">
+    {% csrf_token %}
+    <div class="col-md-4 col-sm-4"> </div> <input name="filePath" type="file"><br><br>
     <br>
-   
-    <form method="post" enctype="multipart/form-data" action="predictImage">
-  
- {% csrf_token %}
- <div class="col-md-4 col-sm-4"><label for="fname">Subir imagen:</label> </div> <input name="filePath" type="file"><br><br>
- <br>
-
- 
- <input type="submit" value="Procesar" ></div>
-
- <h2>La clasificacion de la imagen es: {{predictedLabel}}</h2>
- <img width="200" height="200" src={{filePathName}} alt='imagename'>
- <!-- {{filePathName}} -->
-
+    <input type="submit" value="Predecir">
+    <br>
+    <br>
+    <!-- <h4>La clasificacion de la imagen es: {{predictedLabel}}, con una probabilidad del {{Probabilidad}} %</h4>
+    <img src={{filePathName}} class="rounded" alt="Cinque Terre" width="304" height="236"> -->
+    <!-- {{filePathName}} -->
+    <!-- <div class="containe"> -->
+        <!-- <div class="card" style="width:400px"> -->
+            <h4>Resultados</h4>
+            <p>La imagen es clasificada como:</p>
+            <img class="rounded" src={{filePathName}} alt="Card image" width="304" height="236">
+            <!-- <div class="card-body"> -->
+                <h4 class="card-title">{{predictedLabel}}</h4>
+                <p class="card-text">Probabilidad: {{Probabilidad}} %</p>
+            <!-- </div> -->
+        <!-- </div> -->
+    <!-- </div> -->
 </form>
 <br>
-
-
 {% endblock %}

@@ -21,9 +21,12 @@ with open('./models/clases.json','r') as f:
 labelInfo=json.loads(labelInfo)
 
 
-
+#Los gráficos son utilizados por tf.functions para representar los cálculos de la función.
+# Cada gráfico contiene un conjunto de tf.Operationobjetos, que representan unidades de cálculo; y
+#  tf.Tensorobjetos, que representan las unidades de datos que fluyen entre operaciones.
 model_graph = tf.Graph()
 with model_graph.as_default():
+    #tf.compat.v1.Session() proporciona el entorno para ejecutar objetos tf.Operation y evaluar objetos tf.Tensor. 
     tf_session = tf.compat.v1.Session()
     with tf_session.as_default():
         model=load_model('./models/modeloCNN.h5')
@@ -37,6 +40,7 @@ def index(request):
 
 
 def predictImage(request):
+    import numpy as np
     print (request)
     print (request.POST.dict())
     fileObj=request.FILES['filePath']
@@ -52,13 +56,18 @@ def predictImage(request):
         with tf_session.as_default():
             predi=model.predict(x)
 
+            #Se transforma la probabilidad sobre el 100%
+            probabilidad=predi[:,np.argmax(model.predict(x))]
+            probabilidad=probabilidad*100
+            
+
     
 
-    import numpy as np
-    #resp=CATEGORIES[np.argmax(model.predict(x))]
+    
+    #CATEGORIAS 'avion', 'automovil','pajaro','gato','ciervo','perro','rana','caballo','embarcacion','camion' 
     predictedLabel=labelInfo[str(np.argmax(predi[0]))]
 
-    context={'filePathName':filePathName,'predictedLabel':predictedLabel[1]}
+    context={'filePathName':filePathName,'predictedLabel':predictedLabel[1], 'Probabilidad':probabilidad}
     return render(request,'index.html',context) 
 
 def viewDataBase(request):
